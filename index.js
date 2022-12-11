@@ -15,11 +15,12 @@ app.get('/auth', function (req, res) {
     if (req.session.uid) {
         res.status(200).send("OKE")
     } else {
+
         res.status(401).send("GA OKE?")
     }
 });
 app.get('/auth/401', function (req, res) {
-    res.status(401);
+    res.sendFile(path.join(__dirname, '/page/401.html'));
 });
 
 

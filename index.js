@@ -13,18 +13,21 @@ app.use(session({ secret: "Shh, its a secret!" }));
 
 app.get('/auth', function (req, res) {
     if (req.session.uid) {
-        var header = req.headers.get("REQURL").includes("ide-" + req.session.uid)
+        var header = req.headers.requrl.includes("ide-" + req.session.uid)
         if (header) {
             res.status(200).send("OKE")
+
         } else {
-            res.status(401).send("ga oke")
+
+            res.status(401).send("OKE")
         }
     } else {
+
         res.status(401).send("GA OKE?")
     }
 });
 app.get('/auth/401', function (req, res) {
-    res.sendFile(path.join(__dirname, '/page/401.html'));
+    res.redirect("/auth/login")
 });
 
 
@@ -44,14 +47,14 @@ app.get('/auth/logout', function (req, res) {
 
 app.post('/auth/login', function (req, res) {
     console.log(req.body.password)
-    var uid = req.body.username;
+    var uid = "uid=" + req.body.username + ",cn=users,cn=accounts,dc=dignas,dc=space"
     authenticate({
         ldapOpts: { url: 'ldap://freeipa.dignas.space:389' },
         userDn: uid,
         userPassword: req.body.password,
     }).then((res) => {
 
-        req.session.uid = uid
+        req.session.uid = req.body.username
         res.redirect("/")
     }).catch(() => {
 

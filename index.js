@@ -4,6 +4,7 @@ var session = require('express-session');
 var bodyParser = require('body-parser')
 const { authenticate } = require('ldap-authentication')
 const path = require('path');
+require('dotenv').config()
 
 var app = express();
 
@@ -47,9 +48,9 @@ app.get('/auth/logout', function (req, res) {
 
 app.post('/auth/login', function (req, res) {
     console.log(req.body.password)
-    var uid = "uid=" + req.body.username + ",cn=users,cn=accounts,dc=dignas,dc=space"
+    var uid = "uid=" + req.body.username + process.env.BASEDN
     authenticate({
-        ldapOpts: { url: 'ldap://freeipa.dignas.space:389' },
+        ldapOpts: { url: 'ldap://' +process.env.LDAPURL+ ':389' },
         userDn: uid,
         userPassword: req.body.password,
     }).then((res) => {

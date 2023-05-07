@@ -47,8 +47,9 @@ app.get('/auth/logout', function (req, res) {
 });
 
 app.post('/auth/login', function (req, res) {
-    console.log(req.body.password)
+    // console.log(req.body.password)
     var uid = "uid=" + req.body.username + process.env.BASEDN
+    console.log(uid)
     authenticate({
         ldapOpts: { url: 'ldap://' +process.env.LDAPURL+ ':389' },
         userDn: uid,
